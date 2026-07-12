@@ -1,6 +1,7 @@
 package josh.ecommerce.DTO;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import josh.ecommerce.Entity.Role;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,7 @@ public class UserCreateDto {
     @NotBlank
     private String password;
 
-    @NotBlank
+    @NotNull
     private Role role;
 
 }

@@ -21,7 +21,7 @@ public class UserUpdateDto {
     @NotBlank
     private String password;
 
-    @NotBlank
+    @NotNull
     private Role role;
 
 }

@@ -1,6 +1,5 @@
 package josh.ecommerce.DTO;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import josh.ecommerce.Entity.OrderStatus;
 import lombok.Getter;
@@ -13,7 +12,7 @@ public class OrderUpdateDto {
     @NotNull
     private Integer id;
 
-    @NotBlank
+    @NotNull
     private OrderStatus orderStatus;
 
 }
