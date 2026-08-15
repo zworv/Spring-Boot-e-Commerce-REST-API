@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/customer")
+@RequestMapping("/api/customer")
 public class CustomerController {
 
     @Autowired

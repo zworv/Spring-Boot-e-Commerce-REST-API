@@ -40,3 +40,9 @@
 
 - [x] Order API
 - [x] OrderItem API
+
+# 6. Other
+
+- [x] Replace default authentication to JWT
+  - [x] Implement JWT authentication
+  - [x] Remove default authentication

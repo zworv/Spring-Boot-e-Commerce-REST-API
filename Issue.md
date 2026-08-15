@@ -65,3 +65,11 @@ Spring Data JPA
   - change CartItem connect to Cart(id)
 - Composite PK
   - See https://www.baeldung.com/jpa-composite-primary-keys
+
+JSON Web Token
+- JWT implementation
+  - See (Some functions are deprecated) https://medium.com/@victoronu/implementing-jwt-authentication-in-a-simple-spring-boot-application-with-java-b3135dbdb17b
+  - See https://medium.com/@himanshupapola/implementing-jwt-authentication-in-spring-security-a-complete-guide-d35e3dfd7a42
+  - See https://medium.com/@sarveshkhamkar321/building-role-based-authorization-in-spring-boot-with-jwt-and-spring-security-5181e0fb26c1
+  - See https://docs.spring.io/spring-security/reference/servlet/authentication/index.html
+  - See https://github.com/jwtk/jjwt

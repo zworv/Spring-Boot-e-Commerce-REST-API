@@ -6,6 +6,7 @@
 
 ---
 
+- Using JSON Web Token authentication.
 - One admin only and do not store in the database (use YAML properties data).
 - Username cannot repeat. (Caused by loadUserByUsername())
 - Each seller cannot have same product name.
@@ -73,72 +74,72 @@ OrderItems
 
 ### 3. API
 
+Authentication
+
+| Method | API             | Function |
+|--------|-----------------|----------|
+| POST   | /api/auth/login | Login    |
+
 Admin
 
-| Method | API                   | Function                   |
-|--------|-----------------------|----------------------------|
-| POST   | /login                | Login                      |
-| GET    | /logout               | Logout                     |
-| GET    | /admin                | View customers and sellers |
-| POST   | /admin/customers      | Add customer               |
-| GET    | /admin/customers      | View customers             |
-| GET    | /admin/customers/{id} | View customer {id}         |
-| PUT    | /admin/customers      | Update customer            |
-| DELETE | /admin/customers/{id} | Delete customer {id}       |
-| POST   | /admin/sellers        | Add seller                 |
-| GET    | /admin/sellers        | View sellers               |
-| GET    | /admin/sellers/{id}   | View seller {id}           |
-| PUT    | /admin/sellers        | Update seller by id        |
-| DELETE | /admin/sellers/{id}   | Delete seller {id}         |
+| Method | API                       | Function                   |
+|--------|---------------------------|----------------------------|
+| GET    | /api/admin                | View customers and sellers |
+| POST   | /api/admin/customers      | Add customer               |
+| GET    | /api/admin/customers      | View customers             |
+| GET    | /api/admin/customers/{id} | View customer {id}         |
+| PUT    | /api/admin/customers      | Update customer            |
+| DELETE | /api/admin/customers/{id} | Delete customer {id}       |
+| POST   | /api/admin/sellers        | Add seller                 |
+| GET    | /api/admin/sellers        | View sellers               |
+| GET    | /api/admin/sellers/{id}   | View seller {id}           |
+| PUT    | /api/admin/sellers        | Update seller by id        |
+| DELETE | /api/admin/sellers/{id}   | Delete seller {id}         |
 
 Customer
 
-| Method | API                | Function                         |
-|--------|--------------------|----------------------------------|
-| POST   | /customer/register | Sign up and create cart          |
-| POST   | /login             | Login                            |
-| GET    | /logout            | Logout                           |
-| PUT    | /customer          | Update current customer          |
-| DELETE | /customer          | Delete current customer and cart |
+| Method | API                    | Function                         |
+|--------|------------------------|----------------------------------|
+| POST   | /api/customer/register | Sign up and create cart          |
+| PUT    | /api/customer          | Update current customer          |
+| DELETE | /api/customer          | Delete current customer and cart |
 
 Seller
 
-| Method | API              | Function              |
-|--------|------------------|-----------------------|
-| POST   | /seller/register | Sign up               |
-| POST   | /login           | Login                 |
-| GET    | /logout          | Logout                |
-| PUT    | /seller          | Update current seller |
-| DELETE | /seller          | Delete current seller |
+| Method | API                  | Function              |
+|--------|----------------------|-----------------------|
+| POST   | /api/seller/register | Sign up               |
+| PUT    | /api/seller          | Update current seller |
+| DELETE | /api/seller          | Delete current seller |
 
 Product
 
-| Method | Authority | API              | Function                       |
-|--------|-----------|------------------|--------------------------------|
-| POST   | Seller    | /products        | Add seller's product           |
-| GET    | Any       | /products        | Get all products               |
-| GET    | Any       | /products/{id}   | Get product {id}               |
-| GET    | Any       | /products/{name} | Get products {name}            |
-| PUT    | Seller    | /products        | Update seller's product        |
-| DELETE | Seller    | /products/{name} | Delete seller's product {name} |
+| Method | Authority | API                  | Function                       |
+|--------|-----------|----------------------|--------------------------------|
+| POST   | Seller    | /api/products        | Add seller's product           |
+| GET    | Any       | /api/products        | Get all products               |
+| GET    | Any       | /api/products/{id}   | Get product {id}               |
+| GET    | Any       | /api/products/{name} | Get products {name}            |
+| PUT    | Seller    | /api/products        | Update seller's product        |
+| DELETE | Seller    | /api/products/{name} | Delete seller's product {name} |
 
 Cart
 
-| Method | Authority | API   | Function             |
-|--------|-----------|-------|----------------------|
-| GET    | Customer  | /cart | Get all cartItems    |
-| PUT    | Customer  | /cart | Update cartItem      |
-| DELETE | Customer  | /cart | Delete all cartitems |
+| Method | Authority | API       | Function             |
+|--------|-----------|-----------|----------------------|
+| GET    | Customer  | /api/cart | Get all cartItems    |
+| PUT    | Customer  | /api/cart | Update cartItem      |
+| DELETE | Customer  | /api/cart | Delete all cartitems |
 
 Order
 
-| Method | Authority        | API          | Function                     |
-|--------|------------------|--------------|------------------------------|
-| POST   | Customer         | /orders      | Add order                    |
-| GET    | Seller, Customer | /orders/{id} | Get order {id}               |
-| GET    | Seller, Customer | /orders      | Get all orders               |
-| PUT    | Seller           | /orders      | Update order status of order |
-| DELETE | Seller, Customer | /orders      | Cancel order                 |
+| Method | Authority        | API              | Function                     |
+|--------|------------------|------------------|------------------------------|
+| POST   | Customer         | /api/orders      | Add order                    |
+| GET    | Seller, Customer | /api/orders/{id} | Get order {id}               |
+| GET    | Seller, Customer | /api/orders      | Get all orders               |
+| PUT    | Seller           | /api/orders      | Update order status of order |
+| DELETE | Seller, Customer | /api/orders      | Cancel order                 |
 
 ### 4. Technique
 
@@ -184,4 +185,7 @@ spring:
 admin:
     username: admin
     password: admin
+
+jwt:
+  expiration: 3600000
 ```
