@@ -33,7 +33,7 @@ public class CustomerController {
         if(!customer.getRole().equals(Role.CUSTOMER)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        if(userService.existsCustomer(customer.getUsername())) {
+        if(userService.existsUsername(customer.getUsername())) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 

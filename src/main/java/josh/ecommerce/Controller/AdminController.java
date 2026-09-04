@@ -41,7 +41,7 @@ public class AdminController {
         if(!seller.getRole().equals(Role.SELLER)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        if(userService.existsSeller(seller.getUsername())) {
+        if(userService.existsUsername(seller.getUsername())) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
@@ -79,6 +79,9 @@ public class AdminController {
         }
 
         UserDto updatedSeller = userService.updateSeller(seller);
+        if(updatedSeller == null) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
 
         return new ResponseEntity<>(updatedSeller, HttpStatus.OK);
     }
@@ -96,11 +99,11 @@ public class AdminController {
     }
 
     @PostMapping("/customers")
-    public ResponseEntity<?> addCustomer(@Valid @RequestBody UserCreateDto customer) {
+    public ResponseEntity<UserDto> addCustomer(@Valid @RequestBody UserCreateDto customer) {
         if(!customer.getRole().equals(Role.CUSTOMER)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        if(userService.existsCustomer(customer.getUsername())) {
+        if(userService.existsUsername(customer.getUsername())) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
@@ -114,7 +117,7 @@ public class AdminController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(List.of(addedCustomer, addedCart), HttpStatus.CREATED);
+        return new ResponseEntity<>(addedCustomer, HttpStatus.CREATED);
     }
 
     @GetMapping("/customers")
@@ -143,6 +146,9 @@ public class AdminController {
         }
 
         UserDto updatedCustomer = userService.updateCustomer(customer);
+        if(updatedCustomer == null) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
 
         return new ResponseEntity<>(updatedCustomer, HttpStatus.OK);
     }

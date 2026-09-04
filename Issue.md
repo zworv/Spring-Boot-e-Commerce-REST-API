@@ -19,11 +19,15 @@ MySQL
       - @EntityGraph: 在 Repository 方法上添加 @EntityGraph("graphName")，JPA 会根据该图生成包含必要 JOIN 的 SQL 查询。
         - StackOverflowError
           - Solution: 改成單向關聯
+- cannot delete product when product in someone's cart
+  - delete product in someone's cart
+- cannot delete order when user delete
+  - soft delete user
 
 Spring Security
 - print log
     - yaml: logging.level.org.springframework.security=DEBUG
-- use yaml data as admin data
+- use YAML data as admin data
     - @Value(VALUE) > @ConfigurationProperties(prefix = PREFIX)
     - See 3. Simple Properties of https://www.baeldung.com/configuration-properties-in-spring-boot
         - then ConfigProperties class add to SecurityConfig
@@ -44,7 +48,7 @@ Spring Security
   - WARN: Found 2 UserDetailsService beans, with names [sellerDetailsService, userDetailsService]. Global Authentication Manager will not use a UserDetailsService for username/password login. Consider publishing a single UserDetailsService bean.
   > uses **a** UserDetailsService and PasswordEncoder to authenticate a username and password
   - See https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/dao-authentication-provider.html
-  - Solution: use one UserDetailsService to include every roles, instead three UserDetailsService
+  - Solution: use one UserDetailsService to include every role, instead three UserDetailsService
   - DOES NOT FIX THE PROBLEM (need to handle extra login field)
   - Solution1: Single login/logout page and custom authentication(session)
     - Session tutorial https://www.youtube.com/watch?v=4_NXWzqR5ZQ
@@ -67,9 +71,20 @@ Spring Data JPA
   - See https://www.baeldung.com/jpa-composite-primary-keys
 
 JSON Web Token
+- Why JWT authentication get from Authorization: Bearer <token>
+  - Here, Authorization means Authorization Header means where is the token
 - JWT implementation
   - See (Some functions are deprecated) https://medium.com/@victoronu/implementing-jwt-authentication-in-a-simple-spring-boot-application-with-java-b3135dbdb17b
   - See https://medium.com/@himanshupapola/implementing-jwt-authentication-in-spring-security-a-complete-guide-d35e3dfd7a42
   - See https://medium.com/@sarveshkhamkar321/building-role-based-authorization-in-spring-boot-with-jwt-and-spring-security-5181e0fb26c1
   - See https://docs.spring.io/spring-security/reference/servlet/authentication/index.html
   - See https://github.com/jwtk/jjwt
+
+CORS
+- Backend from origin Frontend has been blocked by CORS policy
+  - See https://docs.spring.io/spring-security/reference/reactive/integrations/cors.html
+  - and Add configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+
+Exception
+- Handle @RequestBody JSON parse error throw HttpMessageNotReadableException → @Valid params invalid throw MethodArgumentNotValidException
+  - See https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-controller/ann-exceptionhandler.html

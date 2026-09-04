@@ -11,12 +11,24 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ProductService {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private CartService cartService;
+
+    public boolean existsProduct(User seller, Integer id) {
+        return productRepository.existsBySellerIdAndId(seller.getId(), id);
+    }
+
+    public boolean existsProduct(User seller, String name) {
+        return productRepository.existsBySellerIdAndName(seller.getId(), name);
+    }
 
     public ProductDto addProduct(ProductCreateDto productCreateDto, User seller) {
         if(productRepository.existsBySellerIdAndName(seller.getId(), productCreateDto.getName())) {
@@ -47,6 +59,11 @@ public class ProductService {
         return product != null ? new ProductDto(product) : null;
     }
 
+    public ProductDto getProduct(User seller, String name) {
+        Product product = productRepository.findBySellerIdAndName(seller.getId(), name).orElse(null);
+        return product != null ? new ProductDto(product) : null;
+    }
+
     public List<ProductDto> getProducts(String name) {
         List<Product> products = productRepository.findByName(name);
 
@@ -56,8 +73,22 @@ public class ProductService {
                 .toList();
     }
 
+    public List<ProductDto> getProducts(User seller) {
+        List<Product> products = productRepository.findBySellerId(seller.getId());
+
+        return products
+                .stream()
+                .map(ProductDto::new)
+                .toList();
+    }
+
     public ProductDto updateProduct(ProductUpdateDto productUpdateDto, User seller) {
-        if(!productRepository.existsById(productUpdateDto.getId())) {
+        if(!productRepository.existsBySellerIdAndId(seller.getId(), productUpdateDto.getId()) ||
+                (
+                        this.existsProduct(seller, productUpdateDto.getName()) &&
+                                !Objects.equals(this.getProduct(seller, productUpdateDto.getName()).getId(), productUpdateDto.getId())
+                )
+        ) {
             return null;
         }
 
@@ -73,8 +104,9 @@ public class ProductService {
     }
 
     @Transactional
-    public void deleteProduct(String name, User seller) {
-        productRepository.deleteBySellerIdAndName(seller.getId(), name);
+    public void deleteProduct(Integer id, User seller) {
+        cartService.deleteProductInCarts(id);
+        productRepository.deleteBySellerIdAndId(seller.getId(), id);
     }
 
     @Transactional

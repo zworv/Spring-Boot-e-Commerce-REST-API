@@ -84,7 +84,7 @@ public class OrderService {
 //        deduct inventory
 
         for(CartItem cartItem : cartItems) {
-            Product product = productRepository.findById(cartItem.getId()).orElse(null);
+            Product product = productRepository.findById(cartItem.getProduct().getId()).orElse(null);
             if(product == null) {
                 throw new RuntimeException("Something wrong, when find product by id");
             }

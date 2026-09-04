@@ -13,6 +13,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @EnableMethodSecurity // @PreAuthorize
@@ -34,8 +38,22 @@ public class SecurityConfig {
     }
 
     @Bean
+    public UrlBasedCorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:4200"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/api/**", configuration);
+
+        return source;
+    }
+
+    @Bean
     SecurityFilterChain SecurityFilterChain(HttpSecurity http) {
         http
+                .cors(cors -> {})
                 .csrf(AbstractHttpConfigurer::disable)
 
                 .addFilterBefore(
@@ -50,14 +68,14 @@ public class SecurityConfig {
                 )
 
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/seller/register").permitAll()
-                        .requestMatchers("/seller/**").hasRole("SELLER")
-                        .requestMatchers("/customer/register").permitAll()
-                        .requestMatchers("/customer/**").hasRole("CUSTOMER")
-                        .requestMatchers("/products/**").permitAll()
-                        .requestMatchers("/cart").hasRole("CUSTOMER")
-                        .requestMatchers("/orders").hasAnyRole("SELLER", "CUSTOMER")
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/seller/register").permitAll()
+                        .requestMatchers("/api/seller/**").hasRole("SELLER")
+                        .requestMatchers("/api/customer/register").permitAll()
+                        .requestMatchers("/api/customer/**").hasRole("CUSTOMER")
+                        .requestMatchers("/api/products/**").permitAll()
+                        .requestMatchers("/api/cart").hasRole("CUSTOMER")
+                        .requestMatchers("/api/orders").hasAnyRole("SELLER", "CUSTOMER")
                         .requestMatchers("/**").permitAll()
                 );
 

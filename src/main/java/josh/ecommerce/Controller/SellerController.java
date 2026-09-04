@@ -31,7 +31,7 @@ public class SellerController {
         if(!seller.getRole().equals(Role.SELLER)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        if(userService.existsSeller(seller.getUsername())) {
+        if(userService.existsUsername(seller.getUsername())) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 

@@ -14,11 +14,17 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     List<Product> findByName(String name);
 
+    List<Product> findBySellerId(Integer sellerId);
+
     Optional<Product> findBySellerIdAndName(Integer sellerId, String name);
 
     boolean existsById(Integer id);
 
+    boolean existsBySellerIdAndId(Integer sellerId, Integer id);
+
     boolean existsBySellerIdAndName(Integer sellerId, String name);
+
+    void deleteBySellerIdAndId(Integer sellerId, Integer id);
 
     void deleteBySellerIdAndName(Integer sellerId, String name);
 

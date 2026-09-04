@@ -139,4 +139,17 @@ public class CartService {
         return cartDto;
     }
 
+    @Transactional
+    public void deleteProductInCarts(Integer productId) {
+        List<CartItem> cartItems = cartItemRepository.findByProductId(productId);
+
+        for(CartItem cartItem : cartItems) {
+            Cart cart = cartItem.getCart();
+
+            cart.setPrice(cart.getPrice() - (cartItem.getPrice() * cartItem.getQuantity()));
+
+            cartItemRepository.deleteByCartIdAndProductId(cart.getId(), productId);
+            cartRepository.save(cart);
+        }
+    }
 }

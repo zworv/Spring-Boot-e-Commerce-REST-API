@@ -84,7 +84,7 @@ Admin
 
 | Method | API                       | Function                   |
 |--------|---------------------------|----------------------------|
-| GET    | /api/admin                | View customers and sellers |
+| GET    | /api/admin                | View sellers and customers |
 | POST   | /api/admin/customers      | Add customer               |
 | GET    | /api/admin/customers      | View customers             |
 | GET    | /api/admin/customers/{id} | View customer {id}         |
@@ -114,14 +114,15 @@ Seller
 
 Product
 
-| Method | Authority | API                  | Function                       |
-|--------|-----------|----------------------|--------------------------------|
-| POST   | Seller    | /api/products        | Add seller's product           |
-| GET    | Any       | /api/products        | Get all products               |
-| GET    | Any       | /api/products/{id}   | Get product {id}               |
-| GET    | Any       | /api/products/{name} | Get products {name}            |
-| PUT    | Seller    | /api/products        | Update seller's product        |
-| DELETE | Seller    | /api/products/{name} | Delete seller's product {name} |
+| Method | Authority | API                       | Function                     |
+|--------|-----------|---------------------------|------------------------------|
+| POST   | Seller    | /api/products             | Add seller's product         |
+| GET    | Seller    | /api/products/seller      | Get seller's product         |
+| GET    | Any       | /api/products             | Get all products             |
+| GET    | Any       | /api/products/id/{id}     | Get product {id}             |
+| GET    | Any       | /api/products/name/{name} | Get products {name}          |
+| PUT    | Seller    | /api/products             | Update seller's product      |
+| DELETE | Seller    | /api/products/id/{id}     | Delete seller's product {id} |
 
 Cart
 

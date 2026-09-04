@@ -43,7 +43,12 @@ public class UserService implements UserDetailsService, CommandLineRunner {
         throw new UsernameNotFoundException("User '" + username + "' not found");
     }
 
-    private void initAdmin() {
+    private void initAdmin() throws Exception {
+        if(userRepository.existsByUsername(adminConfigProperties.getUsername()) &&
+                !userRepository.existsByRoleAndUsername(Role.ADMIN, adminConfigProperties.getUsername())) {
+            throw new Exception("Invalid admin role");
+        }
+
         if(userRepository.existsByRoleAndUsername(Role.ADMIN, adminConfigProperties.getUsername())) {
             return;
         }
@@ -58,8 +63,12 @@ public class UserService implements UserDetailsService, CommandLineRunner {
 
     @Override
     @NullMarked
-    public void run(String... args) {
+    public void run(String... args) throws Exception {
         initAdmin();
+    }
+
+    public boolean existsUsername(String username) {
+        return userRepository.existsByUsername(username);
     }
 
     public boolean existsSeller(Integer id) {
@@ -72,7 +81,7 @@ public class UserService implements UserDetailsService, CommandLineRunner {
 
     public UserDto addSeller(UserCreateDto sellerCreateDto) {
         if(!Objects.equals(Role.SELLER, sellerCreateDto.getRole()) ||
-                userRepository.existsByRoleAndUsername(Role.SELLER, sellerCreateDto.getUsername())) {
+                userRepository.existsByUsername(sellerCreateDto.getUsername())) {
             return null;
         }
 
@@ -116,7 +125,7 @@ public class UserService implements UserDetailsService, CommandLineRunner {
         User seller = new User();
         seller.setId(sellerUpdateDto.getId());
         seller.setUsername(sellerUpdateDto.getUsername());
-        seller.setPassword(sellerUpdateDto.getPassword());
+        seller.setPassword(passwordEncoder.encode(sellerUpdateDto.getPassword()));
         seller.setRole(sellerUpdateDto.getRole());
 
         return new UserDto(userRepository.save(seller));
@@ -137,7 +146,7 @@ public class UserService implements UserDetailsService, CommandLineRunner {
 
     public UserDto addCustomer(UserCreateDto customerCreateDto) {
         if(!customerCreateDto.getRole().equals(Role.CUSTOMER) ||
-                userRepository.existsByRoleAndUsername(Role.CUSTOMER, customerCreateDto.getUsername())) {
+                userRepository.existsByUsername(customerCreateDto.getUsername())) {
             return null;
         }
 
@@ -181,7 +190,7 @@ public class UserService implements UserDetailsService, CommandLineRunner {
         User customer = new User();
         customer.setId(customerUpdateDto.getId());
         customer.setUsername(customerUpdateDto.getUsername());
-        customer.setPassword(customerUpdateDto.getPassword());
+        customer.setPassword(passwordEncoder.encode(customerUpdateDto.getPassword()));
         customer.setRole(customerUpdateDto.getRole());
 
         return new UserDto(userRepository.save(customer));
