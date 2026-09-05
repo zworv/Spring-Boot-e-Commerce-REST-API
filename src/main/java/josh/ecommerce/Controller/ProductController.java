@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import josh.ecommerce.DTO.*;
 import josh.ecommerce.Entity.User;
 import josh.ecommerce.Service.CartService;
+import josh.ecommerce.Service.OrderService;
 import josh.ecommerce.Service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,9 @@ public class ProductController {
 
     @Autowired
     private CartService cartService;
+
+    @Autowired
+    private OrderService orderService;
 
     @PreAuthorize("hasRole('SELLER')")
     @PostMapping
@@ -85,6 +89,7 @@ public class ProductController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
+        orderService.cancelProductOrders(id);
         cartService.deleteProductInCarts(id);
         productService.disabledProduct(id, seller);
 

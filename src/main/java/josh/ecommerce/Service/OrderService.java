@@ -5,7 +5,6 @@ import josh.ecommerce.Entity.*;
 import josh.ecommerce.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -306,19 +305,32 @@ public class OrderService {
         return orderDto;
     }
 
-    @Transactional
+    private void cancelOrder(Order order) {
+        orderItemRepository.findByOrderId(order.getId())
+                .forEach(orderItem -> {
+                    orderItem.getProduct().setQuantity(orderItem.getProduct().getQuantity() + orderItem.getQuantity());
+                    orderItemRepository.save(orderItem);
+                });
+
+        order.setOrderStatus(OrderStatus.CANCELED);
+        order.setOrderCompleteDate(LocalDate.now());
+        orderRepository.save(order);
+    }
+
+    public void cancelProductOrders(Integer productId) {
+        orderItemRepository.findByProductId(productId)
+                .stream()
+                .map(OrderItem::getOrder)
+                .filter(order -> order.getOrderStatus() == OrderStatus.PROCESSING)
+                .distinct()
+                .forEach(this::cancelOrder);
+    }
+
     public void cancelSellerOrders(Integer sellerId) {
-        productRepository.findBySellerId(sellerId)
-                .forEach(product ->
-                    orderItemRepository.findByProductId(product.getId())
-                            .stream()
-                            .filter(orderItem -> orderItem.getOrder().getOrderStatus() == OrderStatus.PROCESSING)
-                            .forEach(orderItem -> {
-                                product.setQuantity(product.getQuantity() + orderItem.getQuantity());
-                                productRepository.save(product);
-                            })
-                );
-        orderRepository.cancelSellerOrders(sellerId);
+        orderRepository.findBySellerId(sellerId)
+                .stream()
+                .filter(order -> order.getOrderStatus() == OrderStatus.PROCESSING)
+                .forEach(this::cancelOrder);
     }
 
 }
