@@ -1,6 +1,7 @@
 package josh.ecommerce.DTO;
 
 import josh.ecommerce.Entity.Product;
+import josh.ecommerce.Entity.ProductStatus;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +19,8 @@ public class ProductDto {
 
     private Float price;
 
+    private ProductStatus productStatus;
+
     private Integer sellerId;
 
     public ProductDto(Product product) {
@@ -26,6 +29,7 @@ public class ProductDto {
         this.description = product.getDescription();
         this.quantity = product.getQuantity();
         this.price = product.getPrice();
+        this.productStatus = product.getProductStatus();
         this.sellerId = product.getSeller().getId();
     }
 

@@ -27,6 +27,9 @@ public class Product {
     @Column(nullable = false)
     private Float price;
 
+    @Enumerated(value = EnumType.STRING)
+    private ProductStatus productStatus;
+
 //    name = "seller_id" 是User PK的別名
     @ManyToOne
     @JoinColumn(name = "seller_id", nullable = false)

@@ -46,3 +46,6 @@
 - [x] Replace default authentication to JWT
   - [x] Implement JWT authentication
   - [x] Remove default authentication
+- [x] Soft delete user (!enabled user) and adjust side effect
+- [x] Soft delete product
+- [ ] Dto constraints validation 

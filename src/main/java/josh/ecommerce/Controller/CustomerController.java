@@ -66,7 +66,7 @@ public class CustomerController {
     @DeleteMapping
     public ResponseEntity<?> deleteCustomer(@AuthenticationPrincipal User customer) {
         cartService.deleteCart(customer.getId());
-        userService.deleteCustomer(customer.getId());
+        userService.disabledCustomer(customer.getId());
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

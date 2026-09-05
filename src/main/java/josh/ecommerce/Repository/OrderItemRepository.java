@@ -10,6 +10,8 @@ import java.util.List;
 @NullMarked
 public interface OrderItemRepository extends JpaRepository<OrderItem, OrderItemId> {
 
+    List<OrderItem> findByProductId(Integer productId);
+
     List<OrderItem> findByOrderId(Integer orderId);
 
     void deleteByOrderId(Integer orderId);

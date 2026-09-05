@@ -5,6 +5,7 @@ import josh.ecommerce.DTO.UserDto;
 import josh.ecommerce.DTO.UserUpdateDto;
 import josh.ecommerce.Entity.Role;
 import josh.ecommerce.Entity.User;
+import josh.ecommerce.Entity.UserStatus;
 import josh.ecommerce.Repository.UserRepository;
 import josh.ecommerce.Security.AdminConfigProperties;
 import org.jspecify.annotations.NullMarked;
@@ -57,6 +58,7 @@ public class UserService implements UserDetailsService, CommandLineRunner {
         admin.setUsername(adminConfigProperties.getUsername());
         admin.setPassword(passwordEncoder.encode(adminConfigProperties.getPassword()));
         admin.setRole(Role.ADMIN);
+        admin.setUserStatus(UserStatus.ENABLED);
 
         userRepository.save(admin);
     }
@@ -89,6 +91,7 @@ public class UserService implements UserDetailsService, CommandLineRunner {
         seller.setUsername(sellerCreateDto.getUsername());
         seller.setPassword(passwordEncoder.encode(sellerCreateDto.getPassword()));
         seller.setRole(sellerCreateDto.getRole());
+        seller.setUserStatus(UserStatus.ENABLED);
 
         return new UserDto(userRepository.save(seller));
     }
@@ -132,8 +135,8 @@ public class UserService implements UserDetailsService, CommandLineRunner {
     }
 
     @Transactional
-    public void deleteSeller(Integer id) {
-        userRepository.deleteByRoleAndId(Role.SELLER, id);
+    public void disabledSeller(Integer id) {
+        userRepository.disabledByRoleAndId(Role.SELLER, id);
     }
 
     public boolean existsCustomer(Integer id) {
@@ -154,6 +157,7 @@ public class UserService implements UserDetailsService, CommandLineRunner {
         customer.setUsername(customerCreateDto.getUsername());
         customer.setPassword(passwordEncoder.encode(customerCreateDto.getPassword()));
         customer.setRole(customerCreateDto.getRole());
+        customer.setUserStatus(UserStatus.ENABLED);
 
         return new UserDto(userRepository.save(customer));
     }
@@ -197,8 +201,8 @@ public class UserService implements UserDetailsService, CommandLineRunner {
     }
 
     @Transactional
-    public void deleteCustomer(Integer id) {
-        userRepository.deleteByRoleAndId(Role.CUSTOMER, id);
+    public void disabledCustomer(Integer id) {
+        userRepository.disabledByRoleAndId(Role.CUSTOMER, id);
     }
 
 }

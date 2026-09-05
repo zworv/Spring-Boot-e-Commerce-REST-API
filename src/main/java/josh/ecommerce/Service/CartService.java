@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -149,6 +150,28 @@ public class CartService {
             cart.setPrice(cart.getPrice() - (cartItem.getPrice() * cartItem.getQuantity()));
 
             cartItemRepository.deleteByCartIdAndProductId(cart.getId(), productId);
+            cartRepository.save(cart);
+        }
+    }
+
+    @Transactional
+    public void deleteSellerProductsInCarts(Integer sellerId) {
+        List<Product> products = productRepository.findBySellerId(sellerId);
+
+        List<CartItem> cartItems = products.stream()
+                .map(product -> cartItemRepository.findByProductId(product.getId()))
+                .filter(list -> !list.isEmpty())
+                .reduce(new ArrayList<>(), (list, subCartItems) -> {
+                    list.addAll(subCartItems);
+                    return list;
+                });
+
+        for(CartItem cartItem : cartItems) {
+            Cart cart = cartItem.getCart();
+
+            cart.setPrice(cart.getPrice() - cartItem.getPrice() * cartItem.getQuantity());
+
+            cartItemRepository.deleteByCartIdAndProductId(cart.getId(), cartItem.getProduct().getId());
             cartRepository.save(cart);
         }
     }

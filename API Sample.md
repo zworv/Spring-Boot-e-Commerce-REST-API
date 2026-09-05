@@ -8,6 +8,11 @@ public enum Role {
     SELLER,
     CUSTOMER
 }
+
+public enum UserStatus {
+    ENABLED,
+    DISABLED
+}
 ```
 
 - Create:
@@ -32,11 +37,19 @@ public enum Role {
 {
   "id": 1,
   "username": "USERNAME",
-  "role": "ROLE"
+  "role": "ROLE",
+  "userStatus": "USER STATUS"
 }
 ```
 
 ### 2. Product
+
+```java
+public enum ProductStatus {
+    ENABLED,
+    DISABLED
+}
+```
 
 - Create
 ```json
@@ -67,6 +80,7 @@ public enum Role {
   "description": "DESCRIPTION",
   "quantity": 0,
   "price": 0.0,
+  "productStatus": "PRODUCT STATUS",
   "sellerId": 1
 }
 ```

@@ -6,6 +6,8 @@ import josh.ecommerce.DTO.UserDto;
 import josh.ecommerce.DTO.UserUpdateDto;
 import josh.ecommerce.Entity.Role;
 import josh.ecommerce.Entity.User;
+import josh.ecommerce.Service.CartService;
+import josh.ecommerce.Service.OrderService;
 import josh.ecommerce.Service.ProductService;
 import josh.ecommerce.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,12 @@ public class SellerController {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private CartService cartService;
+
+    @Autowired
+    private OrderService orderService;
 
     @PostMapping("/register")
     public ResponseEntity<UserDto> addSeller(@Valid @RequestBody UserCreateDto seller) {
@@ -58,8 +66,10 @@ public class SellerController {
 
     @DeleteMapping
     public ResponseEntity<?> deleteSeller(@AuthenticationPrincipal User seller) {
-        productService.deleteProducts(seller.getId());
-        userService.deleteSeller(seller.getId());
+        orderService.cancelSellerOrders(seller.getId());
+        cartService.deleteSellerProductsInCarts(seller.getId());
+        productService.disabledProducts(seller.getId());
+        userService.disabledSeller(seller.getId());
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

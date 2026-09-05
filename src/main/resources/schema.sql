@@ -5,7 +5,8 @@ CREATE TABLE IF NOT EXISTS users (
     id          INT     AUTO_INCREMENT  PRIMARY KEY,
     username    TEXT    NOT NULL,
     password    TEXT    NOT NULL,
-    role        ENUM("ADMIN", "SELLER", "CUSTOMER") NOT NULL
+    role        ENUM("ADMIN", "SELLER", "CUSTOMER") NOT NULL,
+    user_status ENUM("ENABLED", "DISABLED")         NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS products (
@@ -15,6 +16,7 @@ CREATE TABLE IF NOT EXISTS products (
     description TEXT    NOT NULL,
     quantity    INT     NOT NULL,
     price       FLOAT   NOT NULL,
+    product_status  ENUM("ENABLED", "DISABLED")     NOT NULL,
 
     CONSTRAINT fk_products_users
         FOREIGN KEY (seller_id)

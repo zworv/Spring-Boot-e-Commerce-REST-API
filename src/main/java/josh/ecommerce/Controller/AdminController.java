@@ -7,6 +7,7 @@ import josh.ecommerce.DTO.UserDto;
 import josh.ecommerce.DTO.UserUpdateDto;
 import josh.ecommerce.Entity.Role;
 import josh.ecommerce.Service.CartService;
+import josh.ecommerce.Service.OrderService;
 import josh.ecommerce.Service.ProductService;
 import josh.ecommerce.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,9 @@ public class AdminController {
 
     @Autowired
     private CartService cartService;
+
+    @Autowired
+    private OrderService orderService;
 
     @GetMapping
     public ResponseEntity<List<List<UserDto>>> getSellersAndCustomers() {
@@ -92,8 +96,10 @@ public class AdminController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        productService.deleteProducts(id);
-        userService.deleteSeller(id);
+        orderService.cancelSellerOrders(id);
+        cartService.deleteSellerProductsInCarts(id);
+        productService.disabledProducts(id);
+        userService.disabledSeller(id);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -160,7 +166,7 @@ public class AdminController {
         }
 
         cartService.deleteCart(id);
-        userService.deleteCustomer(id);
+        userService.disabledCustomer(id);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

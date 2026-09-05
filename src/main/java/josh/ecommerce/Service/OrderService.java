@@ -5,6 +5,7 @@ import josh.ecommerce.Entity.*;
 import josh.ecommerce.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -303,6 +304,21 @@ public class OrderService {
                         .toList()
         );
         return orderDto;
+    }
+
+    @Transactional
+    public void cancelSellerOrders(Integer sellerId) {
+        productRepository.findBySellerId(sellerId)
+                .forEach(product ->
+                    orderItemRepository.findByProductId(product.getId())
+                            .stream()
+                            .filter(orderItem -> orderItem.getOrder().getOrderStatus() == OrderStatus.PROCESSING)
+                            .forEach(orderItem -> {
+                                product.setQuantity(product.getQuantity() + orderItem.getQuantity());
+                                productRepository.save(product);
+                            })
+                );
+        orderRepository.cancelSellerOrders(sellerId);
     }
 
 }
