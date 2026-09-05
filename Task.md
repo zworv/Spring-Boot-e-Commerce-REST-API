@@ -48,4 +48,4 @@
   - [x] Remove default authentication
 - [x] Soft delete user (!enabled user) and adjust side effect
 - [x] Soft delete product
-- [ ] Dto constraints validation 
+- [x] Dto constraints validation 
