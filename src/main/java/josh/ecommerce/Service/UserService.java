@@ -125,11 +125,12 @@ public class UserService implements UserDetailsService, CommandLineRunner {
             return null;
         }
 
-        User seller = new User();
-        seller.setId(sellerUpdateDto.getId());
+        User seller = userRepository.findByRoleAndId(Role.SELLER, sellerUpdateDto.getId()).orElse(null);
+        if(seller == null) {
+            return null;
+        }
         seller.setUsername(sellerUpdateDto.getUsername());
         seller.setPassword(passwordEncoder.encode(sellerUpdateDto.getPassword()));
-        seller.setRole(sellerUpdateDto.getRole());
 
         return new UserDto(userRepository.save(seller));
     }
@@ -191,11 +192,12 @@ public class UserService implements UserDetailsService, CommandLineRunner {
             return null;
         }
 
-        User customer = new User();
-        customer.setId(customerUpdateDto.getId());
+        User customer = userRepository.findByRoleAndId(Role.CUSTOMER, customerUpdateDto.getId()).orElse(null);
+        if(customer == null) {
+            return null;
+        }
         customer.setUsername(customerUpdateDto.getUsername());
         customer.setPassword(passwordEncoder.encode(customerUpdateDto.getPassword()));
-        customer.setRole(customerUpdateDto.getRole());
 
         return new UserDto(userRepository.save(customer));
     }

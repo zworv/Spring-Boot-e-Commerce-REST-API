@@ -8,8 +8,9 @@
 
 - Using JSON Web Token authentication.
 - One admin only and do not store in the database (use YAML properties data).
-- Username cannot repeat. (Caused by loadUserByUsername())
-- Soft delete user, product and order
+- Username cannot repeat. (Caused by loadUserByUsername()).
+- User cannot change their role.
+- Soft delete user, product and order.
 - Seller only can COMPLETE or CANCEL order.
 - Customer only can CANCEL order.
 

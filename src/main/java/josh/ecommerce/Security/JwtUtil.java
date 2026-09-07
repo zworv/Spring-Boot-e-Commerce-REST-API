@@ -26,6 +26,7 @@ public class JwtUtil {
     public String generateJwt(User user) {
         return Jwts.builder()
                 .subject(user.getUsername())
+                .claim("id", user.getId())
                 .claim("role", user.getRole().toString())
                 .issuedAt(new Date())
                 .expiration(new Date(new Date().getTime() + jwtExpirationMs))
